@@ -1,0 +1,8 @@
+torch
+torchvision
+scipy
+pandas
+numpy
+cv2
+pytest=3.8.1
+pytest-runner
