@@ -1,5 +1,5 @@
-from nflvision.helpers.plot import ImgPlotter
-from nflvision.helpers.loader import ImgLoader
+from nflvision.utils.plot import ImgPlotter
+from nflvision.utils.loader import ImgLoader
 
 
 __all__ = [
