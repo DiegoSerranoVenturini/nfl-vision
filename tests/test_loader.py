@@ -1,5 +1,5 @@
-from nflvision.utils.loader import ImgLoader
-from nflvision.utils.plot import ImgPlotter
+from nflvision.components.loader import ImgLoader
+from nflvision.components.plotter import ImgPlotter
 import numpy as np
 from matplotlib import pyplot as plt
 

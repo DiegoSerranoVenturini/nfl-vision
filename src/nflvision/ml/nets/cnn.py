@@ -66,7 +66,8 @@ class CNN(nn.Module):
 
         self.conv_blocks = nn.ModuleList(
             [CnnBlock(n_channels_in, n_channels_in*channel_increase_rate, kernel_size, padding, stride, dilation, pool_kernel_size)] +
-            [CnnBlock(n_channels_in*(channel_increase_rate*i), n_channels_in*(i+1*channel_increase_rate), kernel_size, padding, stride, dilation, pool_kernel_size) for i in range(1, n_conv_blocks)]
+            [CnnBlock(n_channels_in*(channel_increase_rate*i), n_channels_in*(i+1*channel_increase_rate), kernel_size, padding, stride, dilation, pool_kernel_size)
+             for i in range(1, n_conv_blocks)]
         )
 
         img_size_output = img_size

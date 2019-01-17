@@ -3,6 +3,7 @@ torchvision
 scipy
 pandas
 numpy
-cv2
-pytest=3.8.1
+opencv-python
+pytest==3.8.1
 pytest-runner
+mlflow
