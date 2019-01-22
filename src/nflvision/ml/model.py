@@ -1,11 +1,15 @@
+import time
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 from sklearn.metrics import balanced_accuracy_score
+import logging
 
 from nflvision.cfg.constants import ImageFormatConstants
+
+log = logging.getLogger(__name__)
 
 
 class ImgClassifier:
@@ -23,11 +27,15 @@ class ImgClassifier:
         return self
 
     def fit(self, train_loader, num_epochs=1, init_lr=0.01):
+        log.info("Estimator fit.")
 
         losses = []
         for epoch in range(num_epochs):
+            start = time.time()
+            # log.info("Epoch {}/{}.".format(epoch, num_epochs))
+            print("Epoch {}/{}".format(epoch+1, num_epochs))
 
-            self._optimizer = self._optimizer(params=self.estimator.parameters(), lr=init_lr)
+            optimizer = self._optimizer(params=self.estimator.parameters(), lr=init_lr)
 
             for images, labels in train_loader:
 
@@ -35,24 +43,27 @@ class ImgClassifier:
                 labels = Variable(labels.long())
 
                 # forward pass
-                loss = self._forward_pass(images, labels)
+                loss, optimizer = self._forward_pass(images, labels, optimizer)
 
                 # backward pass
                 loss.backward()
 
                 # calculate the gradients
-                self._optimizer.step()
+                optimizer.step()
 
                 # log the losses
                 losses.append(loss.item())
 
+            elapsed = time.time() - start
+            log.info("Epoch {}/{}. Seconds elpased: {}".format(epoch, num_epochs, round(elapsed, 1)))
+
             # print('Epoch : %d/%d, Loss: %.4f' % (epoch+1, num_epochs, losses))
         return self
 
-    def _forward_pass(self, features, label):
+    def _forward_pass(self, features, label, optimizer):
 
         # restart the gradient calculations
-        self._optimizer.zero_grad()
+        optimizer.zero_grad()
 
         # Forward pass
         outputs = self.estimator(features)
@@ -61,7 +72,7 @@ class ImgClassifier:
         criterion = self._loss_fn()
         loss = criterion(outputs, label)
 
-        return loss
+        return loss, optimizer
 
     def predict(self, features):
 
@@ -81,6 +92,7 @@ class ImgClassifierEvaluator:
 
     @staticmethod
     def evaluate(classifier: ImgClassifier, evaluation_loader):
+        log.info("Evaluating estimator results.")
 
         accuracies = []
 

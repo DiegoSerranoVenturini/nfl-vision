@@ -1,3 +1,4 @@
+import time
 from nflvision import ImgPlotter, ImgLoader, ImgClassifier, nets, losses, optim
 from nflvision.ml.model import ImgClassifierEvaluator
 from nflvision.components.tracker import ExperimentTracker
@@ -5,6 +6,7 @@ from nflvision.components.tracker import ExperimentTracker
 
 def run_mlapp():
 
+    start = time.time()
     tracker = ExperimentTracker().start_tracking()
 
     try:
@@ -15,14 +17,21 @@ def run_mlapp():
 
         model = ImgClassifier().build(net=experiment_net, loss_fn=losses.CrossEntropyLoss, optimizer=optim.Adam)
 
-        model.fit(loader.train_loader, num_epochs=1, init_lr=0.01)
+        num_epochs = 50
+        model.fit(loader.train_loader, num_epochs=num_epochs, init_lr=0.01)
 
         evaluator = ImgClassifierEvaluator()
 
         evaluation_result = evaluator.evaluate(model, loader.valid_loader)
 
         tracker.log_metric("evaluationResult", evaluation_result)
+        tracker.log_param("numEpochs", num_epochs)
+
+        # log model/estimator
         tracker.log_net(model)
+
+        # log runTime
+        tracker.log_metric("runTime", round(time.time()-start, 2))
 
         tracker.log_param("executionResult", "SUCCESS")
 

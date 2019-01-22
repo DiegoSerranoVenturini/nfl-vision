@@ -7,3 +7,4 @@ opencv-python
 pytest==3.8.1
 pytest-runner
 mlflow
+matplotlib

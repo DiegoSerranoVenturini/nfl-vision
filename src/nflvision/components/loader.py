@@ -1,4 +1,5 @@
 # import cv2
+import logging
 import torch
 import numpy as np
 from torchvision import transforms, datasets
@@ -6,6 +7,8 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from matplotlib.image import imread
 
 from nflvision.cfg.meta import PROJECT_HOME
+
+log = logging.getLogger(__name__)
 
 
 class ImgLoader:
@@ -25,6 +28,8 @@ class ImgLoader:
 
     def build(self, image_size=256, batch_size=64, img_folder=PROJECT_HOME + "/data", valid_size=0.5, shuffle=False,
               seed=42, augment=False):
+
+        log.info("Building image loader.")
 
         self.img_size = image_size
         self.batch_size = batch_size

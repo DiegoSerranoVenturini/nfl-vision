@@ -24,7 +24,6 @@ class ExperimentTracker:
 
         return self
 
-
     @staticmethod
     def log_metric(metric_name, value):
         mlflow.log_metric(metric_name, value)
@@ -35,6 +34,12 @@ class ExperimentTracker:
 
     @staticmethod
     def log_net(model: ImgClassifier):
+        net_repr = repr(model.estimator)
+
+        with open("/tmp/temp_net.txt", "wb") as fnet:
+            fnet.write(net_repr.encode())
+
+        mlflow.log_artifact("/tmp/temp_net.txt", TrackingConstants.NET_REPR_PATH)
         log_model(model.estimator, TrackingConstants.NET_PATH)
 
 

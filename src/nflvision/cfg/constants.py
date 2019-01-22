@@ -12,5 +12,6 @@ class TrackingConstants:
     ARTIFACT_LOCATION = meta.PROJECT_HOME + "/mlflow/artifacts"
     TRACKING_URI = meta.PROJECT_HOME + "/mlflow/mlruns"
 
-    NET_PATH = "net"
+    NET_PATH = "net/model"
+    NET_REPR_PATH = "net/repr"
 
